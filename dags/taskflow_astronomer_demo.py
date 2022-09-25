@@ -12,7 +12,7 @@ default_args = {
 }
 
 @dag(schedule_interval='@daily', default_args=default_args, catchup=False)
-def taskflow():
+def taskflow_astronomer_demo():
 
     @task
     def extract_bitcoin_price() -> Dict[str, float]:
