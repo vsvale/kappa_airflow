@@ -19,6 +19,6 @@ def branchpyoperator():
     training_model = DummyOperator(task_id='training_model')
     is_accurate = DummyOperator(task_id='is_accurate')
     is_inaccurate = DummyOperator(task_id='is_inaccurate')
-    check_accuracy = BranchPythonOperator('check_accuracy', python_callable=_check_accuracy)
-    training_model >> check_accuracy >> [is_accurate,is_inaccurate]
+    check_acc = BranchPythonOperator(task_id='check_accuracy', python_callable=_check_accuracy)
+    training_model >> check_acc >> [is_accurate,is_inaccurate]
 dag = branchpyoperator()
