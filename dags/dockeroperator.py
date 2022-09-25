@@ -1,0 +1,17 @@
+from airflow.decorators import dag, task
+from airflow.utils.dates import days_ago
+
+default_args = {
+    'start_date': days_ago(1),
+}
+
+@dag(schedule_interval='@daily', default_args=default_args, catchup=False)
+def dockeroperator():
+
+    @task.docker(image="quay.io/bitnami/python:3.9",network_mode="bridge",api_version="auto")
+    def randnumber():
+        import random
+        return [random.random() for _ in range(100)]
+
+    randnumber()
+dag = dockeroperator()
