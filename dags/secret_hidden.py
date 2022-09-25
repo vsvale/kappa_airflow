@@ -13,7 +13,7 @@ def secret_hidden():
 
     @task
     def my_very_unsecure_task():
-        print(Variable.get("secret_key"))
+        print(Variable.get("secret"))
 
     my_very_unsecure_task()
 dag = secret_hidden()
