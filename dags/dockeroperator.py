@@ -8,7 +8,7 @@ default_args = {
 @dag(schedule_interval='@daily', default_args=default_args, catchup=False)
 def dockeroperator():
 
-    @task.docker(image="quay.io/bitnami/python:3.9",network_mode="bridge",api_version="auto")
+    @task.docker(image="python:latest",network_mode="bridge",api_version="auto")
     def randnumber():
         import random
         return [random.random() for _ in range(100)]
