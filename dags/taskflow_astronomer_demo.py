@@ -29,4 +29,4 @@ def taskflow_astronomer_demo():
 
     store_data(process_data(extract_bitcoin_price()))
 
-dag = taskflow()
+dag = taskflow_astronomer_demo()
