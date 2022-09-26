@@ -13,7 +13,7 @@ def stackbrach():
     def get_acc_op():
         return 90
     
-    @task.branch(task_id="check_acc_task")
+    @task.branch()
     def check_accuracy(ti):
         acc_value = int(ti)
         if acc_value >=90:
