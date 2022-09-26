@@ -14,8 +14,8 @@ def stackbrach():
         return 90
     
     @task.branch()
-    def check_accuracy(ti):
-        acc_value = int(ti)
+    def check_accuracy(acc):
+        acc_value = int(acc)
         if acc_value >=90:
             return 'deploy_task'
         return 'retrain_task'
