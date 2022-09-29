@@ -24,7 +24,10 @@ def stack_triggerrule():
 
     deploy_op = EmptyOperator(task_id='deploy_task')
     retrain_op = EmptyOperator(task_id='retrain_task')
+    notify_op = EmptyOperator(task_id='notify_task',trigger_rule=TriggerRule.NONE_FAILED)
 
     
-    check_accuracy(get_acc_op())>>[deploy_op,retrain_op]
+    check_accuracy(get_acc_op())>> Label("Acc >= 90") >>deploy_op
+    check_accuracy(get_acc_op())>> Label("Acc < 90") >>retrain_op
+    [deploy_op,retrain_op] >> notify_op
 dag = stack_triggerrule()
