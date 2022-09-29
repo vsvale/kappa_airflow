@@ -14,7 +14,6 @@ def hello_world():
     @task
     def echo_message(message):
         print(message)
-        return message
 
     echo_message('Hello World!')
 dag = hello_world()
