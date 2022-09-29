@@ -7,7 +7,7 @@ default_args = {
     'start_date': days_ago(1),
 }
 
-@dag(schedule_interval='@daily', default_args=default_args, catchup=False)
+@dag(schedule_interval='@daily', default_args=default_args, catchup=False, tags=['astronomer', 'taskgroup'])
 def taskgroup_decorator():
 
     @task.python

@@ -6,7 +6,7 @@ default_args = {
     'start_date': days_ago(1),
 }
 
-@dag(schedule_interval=None, default_args=default_args, catchup=False)
+@dag(schedule_interval=None, default_args=default_args, catchup=False, tags=['stack', 'branch','taskflow'])
 def stackbrach():
 
     @task

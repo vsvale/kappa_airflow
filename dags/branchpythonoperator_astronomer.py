@@ -13,7 +13,7 @@ def _check_accuracy():
         return 'is_inaccurate'
     return 'is_accurate'
 
-@dag(schedule_interval='@daily', default_args=default_args, catchup=False)
+@dag(schedule_interval='@daily', default_args=default_args, catchup=False, tags=['astronomer', 'branch'])
 def branchpyoperator():
 
     training_model = DummyOperator(task_id='training_model')
