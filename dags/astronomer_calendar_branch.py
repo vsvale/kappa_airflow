@@ -1,6 +1,5 @@
 from airflow.decorators import dag, task
 from airflow.utils.dates import days_ago
-from airflow
 from airflow.operators.empty import EmptyOperator
 import yaml
 
