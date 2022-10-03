@@ -10,15 +10,20 @@ default_args = {
 def _check_accuracy():
     accuracy = 0.7
     if (accuracy < 0.5):
-        return 'is_inaccurate'
+        return ['is_inaccurate','send_slack']
     return 'is_accurate'
 
 @dag(schedule_interval='@daily', default_args=default_args, catchup=False, tags=['astronomer', 'branch'])
 def astronomer_branchpythonoperator():
 
     training_model = DummyOperator(task_id='training_model')
+    check_acc = BranchPythonOperator(task_id='check_accuracy', python_callable=_check_accuracy)
     is_accurate = DummyOperator(task_id='is_accurate')
     is_inaccurate = DummyOperator(task_id='is_inaccurate')
-    check_acc = BranchPythonOperator(task_id='check_accuracy', python_callable=_check_accuracy)
-    training_model >> check_acc >> [is_accurate,is_inaccurate]
+    send_slack = DummyOperator(task_id='send_slack')
+    store_acc = DummyOperator(task_id='store_acc',trigger_rule='none_failed_or_skipped')
+
+
+    training_model >> check_acc >> [is_accurate,is_inaccurate, send_slack]
+    [is_accurate,is_inaccurate] >> store_acc
 dag = astronomer_branchpythonoperator()
