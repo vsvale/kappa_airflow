@@ -17,7 +17,7 @@ def _check_accuracy():
 def astronomer_branchpythonoperator():
 
     training_model = DummyOperator(task_id='training_model')
-    check_acc = BranchPythonOperator(task_id='check_accuracy', python_callable=_check_accuracy)
+    check_acc = BranchPythonOperator(task_id='check_accuracy', python_callable=_check_accuracy,do_xcom_push=False)
     is_accurate = DummyOperator(task_id='is_accurate')
     is_inaccurate = DummyOperator(task_id='is_inaccurate')
     send_slack = DummyOperator(task_id='send_slack')
