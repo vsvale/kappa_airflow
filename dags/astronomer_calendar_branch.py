@@ -22,5 +22,5 @@ def astronomer_calendar_branch():
     start = EmptyOperator(task_id='start')
     dont_process = EmptyOperator(task_id='dont_process')
 
-    is_holliday()>>[start,dont_process]
+    is_holliday(ds)>>[start,dont_process]
 dag = astronomer_calendar_branch()
