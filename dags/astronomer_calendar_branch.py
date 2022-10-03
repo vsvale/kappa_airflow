@@ -9,7 +9,7 @@ default_args = {
 }
 
 def _is_holiday(ds):
-    with open('holidays.yaml','r') as f:
+    with open('./include/holidays.yaml','r') as f:
         doc = yaml.load(f,Loader=yaml.SafeLoader)
         if (ds in doc['holidays']):
             return 'dont_process'
