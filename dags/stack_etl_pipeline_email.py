@@ -4,7 +4,7 @@ from airflow.utils.dates import days_ago
 from airflow.operators.empty import EmptyOperator
 from airflow.utils.edgemodifier import Label
 from airflow.utils.trigger_rule import TriggerRule
-from airflow.operator.email_operator import EmailOperator
+from airflow.operators.email_operator import EmailOperator
 import pandas as pd
 import sqlalchemy
 import os
