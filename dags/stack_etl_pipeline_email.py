@@ -33,8 +33,8 @@ Yugabyte on K8s
 
 description = "Pipeline para o processo de ETL dos ambientes de produção oltp ao olap"
 
-@dag(schedule_interval=None, default_args=default_args, catchup=False, tags=['stack', 'email'],doc_md=doc_md, description=description)
-def stack_etlpipelinefirst():
+@dag(schedule_interval=None, default_args=default_args, catchup=False, tags=['stack', 'email','pipeline'],doc_md=doc_md, description=description)
+def stack_etl_pipeline_email():
 
     @task
     def extract():
@@ -85,4 +85,4 @@ def stack_etlpipelinefirst():
 
     extract()>>transform()>>load()>>clean()>>email_task
 
-dag = stack_etlpipelinefirst()
+dag = stack_etl_pipeline_email()

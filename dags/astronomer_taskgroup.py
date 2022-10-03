@@ -8,7 +8,7 @@ default_args = {
 }
 
 @dag(schedule_interval='@daily', default_args=default_args, catchup=False, tags=['astronomer', 'taskgroup'])
-def taskgroup_decorator():
+def astronomer_taskgroup():
 
     @task.python
     def task_a(value):
@@ -26,4 +26,4 @@ def taskgroup_decorator():
     def tasks():
         return task_a(task_b(task_c(10)))
     tasks()
-dag = taskgroup_decorator()
+dag = astronomer_taskgroup()

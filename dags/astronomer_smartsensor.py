@@ -11,7 +11,7 @@ default_args = {
 }
 
 @dag(schedule_interval='@daily', default_args=default_args, catchup=False, tags=['astronomer', 'sensor','file'])
-def smartsensor_astronomer_demo():
+def astronomer_smartsensor():
     FILENAME = 'bitcoin.json'
 
     sensors = [
@@ -33,4 +33,4 @@ def smartsensor_astronomer_demo():
 
     sensors >> proccessing() >> storing()
 
-dag = smartsensor_astronomer_demo()
+dag = astronomer_smartsensor()

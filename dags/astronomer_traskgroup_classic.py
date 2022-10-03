@@ -8,7 +8,7 @@ default_args = {
     'start_date': days_ago(1)
 }
 
-with DAG('taskgroups_astronomer_demo', schedule_interval='@daily', default_args=default_args, catchup=False, tags=['astronomer', 'taskgroup']) as dag:
+with DAG('astronomer_traskgroup_classic', schedule_interval='@daily', default_args=default_args, catchup=False, tags=['astronomer', 'taskgroup']) as dag:
 
     extracting = DummyOperator(task_id='extracting')
 

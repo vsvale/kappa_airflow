@@ -6,7 +6,7 @@ default_args = {
 }
 
 @dag(schedule_interval='@daily', default_args=default_args, catchup=False, tags=['astronomer', 'docker'])
-def dockeroperator():
+def astronomer_dockeroperator():
 
     @task.docker(image="python:latest",network_mode="bridge",api_version="auto")
     def randnumber():
@@ -14,4 +14,4 @@ def dockeroperator():
         return [random.random() for _ in range(100)]
 
     randnumber()
-dag = dockeroperator()
+dag = astronomer_dockeroperator()

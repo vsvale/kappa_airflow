@@ -12,7 +12,7 @@ default_args = {
 }
 
 @dag(schedule_interval='@daily', default_args=default_args, catchup=False, tags=['astronomer', 'taskflow'])
-def taskflow_astronomer_demo():
+def astronomer_taskflow():
 
     @task
     def extract_bitcoin_price() -> Dict[str, float]:
@@ -29,4 +29,4 @@ def taskflow_astronomer_demo():
 
     store_data(process_data(extract_bitcoin_price()))
 
-dag = taskflow_astronomer_demo()
+dag = astronomer_taskflow()

@@ -32,7 +32,7 @@ default_args = {
 
 # [START instantiate_dag]
 dag = DAG(
-    's3-pr-elt-business-spark-operator',
+    'plumber_s3-pr-elt-business-spark-operator',
     default_args=default_args,
     schedule_interval='@daily',
     tags=['development', 's3', 'sensor', 'minio', 'spark', 'operator', 'k8s'])

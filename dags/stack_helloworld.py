@@ -9,11 +9,11 @@ default_args = {
     schedule_interval='@daily', default_args=default_args, catchup=False,
     description="First DAG in airflow", tags=['stack', 'bash']
 )
-def hello_world():
+def stack_helloworld():
 
     @task
     def echo_message(message):
         print(message)
 
     echo_message('Hello World!')
-dag = hello_world()
+dag = stack_helloworld()

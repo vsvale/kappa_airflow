@@ -9,11 +9,11 @@ default_args = {
 }
 
 @dag(schedule_interval='@daily', default_args=default_args, catchup=False, tags=['astronomer', 'secret'])
-def secret_hidden():
+def astronomer_secret_hidden():
 
     @task
     def my_very_unsecure_task():
         print(Variable.get("secret"))
 
     my_very_unsecure_task()
-dag = secret_hidden()
+dag = astronomer_secret_hidden()

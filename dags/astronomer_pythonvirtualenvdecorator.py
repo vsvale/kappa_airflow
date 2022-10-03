@@ -6,7 +6,7 @@ default_args = {
 }
 
 @dag(schedule_interval='@daily', default_args=default_args, catchup=False,tags=['astronomer', 'pyvenv'])
-def pythonvirtualenvdecorator():
+def astronomer_pythonvirtualenvdecorator():
 
     @task.virtualenv(
         use_dill=True,
@@ -21,4 +21,4 @@ def pythonvirtualenvdecorator():
         order_data_dict = json.loads(data_string)
         return order_data_dict
     extract()
-dag = pythonvirtualenvdecorator()
+dag = astronomer_pythonvirtualenvdecorator()

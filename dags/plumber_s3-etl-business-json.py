@@ -46,7 +46,7 @@ default_args = {
 
 # [START instantiate_dag]
 dag = DAG(
-    's3-etl-business-json',
+    'plumber_s3-etl-business-json',
     default_args=default_args,
     schedule_interval='@daily',
     tags=['development', 's3', 'sensor', 'minio', 'python', 'yugabytedb'])

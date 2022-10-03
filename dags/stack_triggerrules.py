@@ -9,7 +9,7 @@ default_args = {
 }
 
 @dag(schedule_interval=None, default_args=default_args, catchup=False, tags=['stack', 'branch','taskflow','triggerrule'])
-def stack_triggerrule():
+def stack_triggerrules():
 
     @task
     def get_acc_op():
@@ -30,4 +30,4 @@ def stack_triggerrule():
     check >> Label("Acc >= 90%") >>deploy_op
     check >> Label("Acc < 90%") >>retrain_op
     [deploy_op,retrain_op] >> notify_op
-dag = stack_triggerrule()
+dag = stack_triggerrules()
