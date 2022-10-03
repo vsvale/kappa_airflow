@@ -1,5 +1,6 @@
 from airflow.decorators import dag, task
 from airflow.utils.dates import days_ago
+from airflow
 from airflow.operators.empty import EmptyOperator
 import yaml
 
@@ -10,7 +11,7 @@ default_args = {
 
 @dag(schedule_interval='@daily', default_args=default_args, catchup=False, tags=['astronomer', 'branch','calendar'])
 def astronomer_calendar_branch():
-    
+    ds = context.get("execution_date")
     @task.branch()
     def is_holliday(ds):
         with open('include/holidays.yaml','r') as f:
