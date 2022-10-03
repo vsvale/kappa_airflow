@@ -8,7 +8,7 @@ default_args = {
 }
 
 
-@dag(schedule_interval='@daily', default_args=default_args, catchup=False, tags=['astronomer', 'branch'])
+@dag(schedule_interval='@daily', default_args=default_args, catchup=False, tags=['astronomer', 'branch','calendar'])
 def astronomer_calendar_branch():
     
     @task.branch()
