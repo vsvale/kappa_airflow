@@ -51,8 +51,8 @@ def datacamp_dag():
 
     email_task = EmailOperator(task_id='Notify', to='viniciusdvale@gmail.com', subject='Datacamp dag sleep well', html_content='<p>Time to wake up little Dag<p>',sla=timedelta(minutes=2))
     salesdata_sensor = FileSensor(task_id='pock_salesdata',filepath='salesdata.csv',poke_interval=30, timeout=60*5, mode='reschedule')
-    isrunday = BranchPythonOperator(task_id='isrunday',python_callable=branch_date)
-    stop_dag = EmptyOperator(task_id='stop_dag')
+    #isrunday = BranchPythonOperator(task_id='isrunday',python_callable=branch_date)
+    #stop_dag = EmptyOperator(task_id='stop_dag')
 
     t_pintme = printme()
     t_sleep = sleep(5)
