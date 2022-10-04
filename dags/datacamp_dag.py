@@ -26,8 +26,11 @@ def etl_dag():
 
     email_task = EmailOperator(task_id='Notify', to='viniciusdvale@gmail.com', subject='Datacamp dag sleep well', html_content='<p>Time to wake up little Dag<p>')
 
+    t_printme = printme()
+    t_sleep = sleep(5)
+
     rand_number >> echo_ex
-    rand_number >> printme()
-    [echo_ex,printme()] >> sleep
-    sleep >> email_task
+    rand_number >> t_printme
+    [echo_ex,t_printme] >> t_sleep
+    t_sleep >> email_task
 dag = etl_dag()
