@@ -12,7 +12,7 @@ default_args = {
 }
 
 @dag(schedule_interval='@daily', default_args=default_args, catchup=False, tags=['datacamp'])
-def etl_dag():
+def datacamp_dag():
     rand_number = BashOperator(task_id='rand_number',bash_command='echo $RANDOM')
     echo_ex = BashOperator(task_id='echo_ex',bash_command='echo "Exemple!"')
 
@@ -28,4 +28,4 @@ def etl_dag():
 
     rand_number >> echo_ex >> printme() >> sleep(5) >> email_task
 
-dag = etl_dag()
+dag = datacamp_dag()
