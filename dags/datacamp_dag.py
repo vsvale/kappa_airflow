@@ -1,6 +1,7 @@
 from airflow.decorators import dag, task
 from airflow.utils.dates import days_ago
 from airflow.operators.bash_operator import BashOperator
+from airflow.operators.email_operator import EmailOperator
 import time
 
 default_args = {
@@ -23,8 +24,10 @@ def etl_dag():
     def sleep(lenght_time):
         time.sleep(lenght_time)
 
+    email_task = EmailOperator(task_id='Notify', to='viniciusdvale@gmail.com', subject='Datacamp dag sleep well', html_content='<p>Time to wake up little Dag<p>')
 
     rand_number >> echo_ex
     rand_number >> printme()
     [echo_ex,printme()] >> sleep
+    sleep >> email_task
 dag = etl_dag()
