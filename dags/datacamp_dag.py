@@ -57,7 +57,7 @@ def datacamp_dag():
     t_pintme = printme()
     t_sleep = sleep(5)
 
-    isrunday >> [rand_number,stop_dag]
+    #isrunday >> [rand_number,stop_dag]
     rand_number >> [echo_ex, t_pintme] >> t_sleep >> email_task >> [salesdata_sensor,echo_template] >> echo_for
 
 dag = datacamp_dag()
