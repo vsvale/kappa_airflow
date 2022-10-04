@@ -17,7 +17,7 @@ default_args = {
 
 @dag(schedule_interval=None, default_args=default_args, catchup=False, tags=['datacamp'])
 def datacamp_simple_dag():
-    rand_number = BashOperator(task_id='rand_number',bash_command='echo $RANDOM')
+    rand_number = BashOperator(task_id='rand_number',bash_command='echo $RANDOM',sla=timedelta(minutes=2))
 
     rand_number
 dag = datacamp_simple_dag()
