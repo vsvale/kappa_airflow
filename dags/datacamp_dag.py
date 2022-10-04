@@ -27,8 +27,8 @@ echo "Writing {{ filename }}"
 
 """
 
-def branch_date(**kwargs):
-    if int(kwargs['ds_nodash']) % 2 == 0:
+def branch_date(ds_nodash):
+    if int(ds_nodash) % 2 == 0:
         return 'rand_number'
     return 'stop_dag'
 
