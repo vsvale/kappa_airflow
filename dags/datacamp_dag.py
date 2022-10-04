@@ -36,7 +36,7 @@ def datacamp_dag():
     rand_number = BashOperator(task_id='rand_number',bash_command='echo $RANDOM')
     echo_ex = BashOperator(task_id='echo_ex',bash_command='echo "Exemple!"')
     echo_template = BashOperator(task_id='echo_template',bash_command=echo_templated, params={'filename':'salesdata.csv'})
-    echo_for = BashOperator(task_id='echo_for',bash_command=for_templated, params={'filename':['sales.text','data.out']},trigger_rule="all_done")
+    echo_for = BashOperator(task_id='echo_for',bash_command=for_templated, params={'filenames':['sales.text','data.out']},trigger_rule="all_done")
 
 
     @task
