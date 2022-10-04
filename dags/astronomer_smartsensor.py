@@ -24,6 +24,7 @@ def astronomer_smartsensor():
 
     @task
     def proccessing():
+        # need to create connection fs_default type File path and extra {"path":"/user/local/airflow/"}
         path = FSHook(conn_id='fs_default').get_path()
         logging.info(f'{path}/{FILENAME}')
 
