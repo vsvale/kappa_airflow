@@ -26,6 +26,9 @@ def datacamp_dag():
 
     email_task = EmailOperator(task_id='Notify', to='viniciusdvale@gmail.com', subject='Datacamp dag sleep well', html_content='<p>Time to wake up little Dag<p>')
 
-    rand_number >> echo_ex >> printme() >> sleep(5) >> email_task
+    t_pintme = printme()
+    t_sleep = sleep(5)
+
+    rand_number >> [echo_ex, t_pintme] >> t_sleep >> email_task
 
 dag = datacamp_dag()
