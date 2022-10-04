@@ -7,9 +7,9 @@ default_args = {
     'start_date': days_ago(1),
     'owner':'vale',
     'email':'viniciusdvale@gmail.com',
-#    'email_on_failure':False,
-#    'email_on_retry:': False,
-#    'email_on_success':False,
+    'email_on_failure':False,
+    'email_on_retry:': False,
+    'email_on_success':False,
 #    'sla': timedelta(minutes=10)
 
 }
