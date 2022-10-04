@@ -11,7 +11,7 @@ default_args = {
 
 }
 
-@dag(schedule_interval='@daily', default_args=default_args, catchup=False, tags=['datacamp'])
+@dag(schedule_interval=None, default_args=default_args, catchup=False, tags=['datacamp'])
 def datacamp_dag():
     rand_number = BashOperator(task_id='rand_number',bash_command='echo $RANDOM')
     echo_ex = BashOperator(task_id='echo_ex',bash_command='echo "Exemple!"')

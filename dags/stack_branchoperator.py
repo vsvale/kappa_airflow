@@ -7,7 +7,7 @@ default_args = {
 }
 
 @dag(schedule_interval=None, default_args=default_args, catchup=False, tags=['stack', 'branch','taskflow'])
-def stackbrach():
+def stack_branchoperator():
 
     @task
     def get_acc_op():
@@ -24,4 +24,4 @@ def stackbrach():
     retrain_op = EmptyOperator(task_id='retrain_task')
 
     check_accuracy(get_acc_op())>>[deploy_op,retrain_op]
-dag = stackbrach()
+dag = stack_branchoperator()
