@@ -2,7 +2,7 @@ from airflow.decorators import dag, task
 from airflow.utils.dates import days_ago
 from airflow.operators.email_operator import EmailOperator
 
-path_temp_csv = "./tmp_files/staging.csv"
+path_temp_csv = "staging.csv"
 email_failed = "viniciusdvale@gmail.com"
 
 default_args = {
@@ -26,7 +26,7 @@ Yugabyte on K8s
 
 description = "Pipeline para o processo de ETL dos ambientes de produção oltp ao olap"
 
-@dag(schedule_interval=None, default_args=default_args, catchup=False, tags=['stack', 'email','pipeline'],doc_md=doc_md, description=description)
+@dag(schedule=None, default_args=default_args, catchup=False, tags=['stack', 'email','pipeline'],doc_md=doc_md, description=description)
 def stack_etl_pipeline_email():
 
     @task
