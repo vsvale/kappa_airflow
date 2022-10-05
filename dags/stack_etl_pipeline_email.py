@@ -1,12 +1,8 @@
-from operator import index
 from airflow.decorators import dag, task
 from airflow.utils.dates import days_ago
-from airflow.operators.empty import EmptyOperator
-from airflow.utils.edgemodifier import Label
-from airflow.utils.trigger_rule import TriggerRule
 from airflow.operators.email_operator import EmailOperator
 
-path_temp_csv = "/opt/airflow/tmp_files/staging.csv"
+path_temp_csv = "./tmp_files/staging.csv"
 email_failed = "viniciusdvale@gmail.com"
 
 default_args = {
@@ -38,6 +34,11 @@ def stack_etl_pipeline_email():
         import pymysql
         import sqlalchemy
         import pandas as pd
+        import os
+
+        path = os.getcwd()
+
+        print(path)
 
         engine = sqlalchemy.create_engine('mysql+pymysql://root:PlumberSDE@172.18.0.2:3306/employees')
         df = pd.read_sql_query(r"""
