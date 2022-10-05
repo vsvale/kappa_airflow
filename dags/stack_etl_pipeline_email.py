@@ -36,11 +36,12 @@ description = "Pipeline para o processo de ETL dos ambientes de produção oltp 
 @dag(schedule_interval=None, default_args=default_args, catchup=False, tags=['stack', 'email','pipeline'],doc_md=doc_md, description=description)
 def stack_etl_pipeline_email():
 
-    @task.virtualenv(system_site_packages=False,requirements=['PyMySQL==1.0.2'])
+    @task.virtualenv(system_site_packages=False,requirements=['PyMySQL>=1.0.2', 'SQLAlchemy>=1.4.41','pandas>=1.5.0'])
     def extract():
         import pymysql
         import sqlalchemy
-        
+        import pandas as pd
+
         engine = sqlalchemy.create_engine('mysql+pymysql://root:PlumberSDE@172.18.0.2:3306/employees')
 
         df = pd.read_sql_query(r"""
