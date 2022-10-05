@@ -76,7 +76,7 @@ def stack_etl_pipeline_email():
         df.to_sql("d_employees",engine,if_exists="replace",index=False)
 
     @task
-    def clean(path_temp_csv):
+    def clean():
         import os
 
         try:
@@ -86,6 +86,6 @@ def stack_etl_pipeline_email():
 
     email_task = EmailOperator(task_id='Notify', to=email_failed, subject='Stack pipeline first finalizado com sucesso', html_content='<p>Salvo em d_employees<p>')
 
-    extract(path_temp_csv)>>transform(path_temp_csv)>>load(path_temp_csv)>>clean(path_temp_csv)>>email_task
+    extract()>>transform()>>load()>>clean()>>email_task
 
 dag = stack_etl_pipeline_email()
