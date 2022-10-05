@@ -6,7 +6,7 @@ from airflow.utils.edgemodifier import Label
 from airflow.utils.trigger_rule import TriggerRule
 from airflow.operators.email_operator import EmailOperator
 
-path_temp_csv = "/tmp/staging.csv"
+path_temp_csv = "/opt/airflow/tmp_files/staging.csv"
 email_failed = "viniciusdvale@gmail.com"
 
 default_args = {
