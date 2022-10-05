@@ -33,8 +33,8 @@ description = "Pipeline para o processo de ETL dos ambientes de produção oltp 
 @dag(schedule_interval=None, default_args=default_args, catchup=False, tags=['stack', 'email','pipeline'],doc_md=doc_md, description=description)
 def stack_etl_pipeline_email():
 
-    @task.virtualenv(system_site_packages=False,requirements=['pip>=22.2.2','PyMySQL>=1.0.2', 'SQLAlchemy>=1.4.41','pandas>=1.3.5'])
-    def extract(path_temp_csv):
+    @task
+    def extract():
         import pymysql
         import sqlalchemy
         import pandas as pd
@@ -55,8 +55,8 @@ def stack_etl_pipeline_email():
                 ,engine)
         df.to_csv(path_temp_csv, index=False)
 
-    @task.virtualenv(system_site_packages=False,requirements=['pip>=22.2.2','pandas>=1.3.5'])
-    def transform(path_temp_csv):
+    @task
+    def transform():
         import pandas as pd
 
         df = pd.read_csv(path_temp_csv)
@@ -65,8 +65,8 @@ def stack_etl_pipeline_email():
         df.drop(['emp_no,first_name,last_name'],axis=1,inplace=True)
         df.to_csv(path_temp_csv, index=False)
 
-    @task.virtualenv(system_site_packages=False,requirements=['pip>=22.2.2','psycopg2>=2.9.3', 'SQLAlchemy>=1.4.41','pandas>=1.3.5'])
-    def load(path_temp_csv):
+    @task
+    def load():
         import psycopg2
         import sqlalchemy
         import pandas as pd
