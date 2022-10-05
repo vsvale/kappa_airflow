@@ -61,6 +61,7 @@ def stack_etl_pipeline_email():
 
         df = pd.read_csv(path_temp_csv)
         df['name'] = df['first_name']+" "+df['last_name']
+        print(df.head(5))
         df.drop(['emp_no,first_name,last_name'],axis=1,inplace=True)
         df.to_csv(path_temp_csv, index=False)
 
