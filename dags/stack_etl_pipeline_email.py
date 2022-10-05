@@ -6,7 +6,7 @@ from airflow.utils.edgemodifier import Label
 from airflow.utils.trigger_rule import TriggerRule
 from airflow.operators.email_operator import EmailOperator
 import pandas as pd
-import sqlalchemy
+
 import os
 
 path_temp_csv = "/tmp/staging.csv"
@@ -39,6 +39,8 @@ def stack_etl_pipeline_email():
     @task.virtualenv(system_site_packages=False,requirements=['PyMySQL==1.0.2'])
     def extract():
         import pymysql
+        import sqlalchemy
+        
         engine = sqlalchemy.create_engine('mysql+pymysql://root:PlumberSDE@172.18.0.2:3306/employees')
 
         df = pd.read_sql_query(r"""
