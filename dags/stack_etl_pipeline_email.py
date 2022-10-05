@@ -15,7 +15,7 @@ email_failed = "viniciusdvale@gmail.com"
 default_args = {
     'start_date': days_ago(1),
     'email': email_failed,
-    'email_on_failure':True
+    'email_on_failure':False
 }
 
 doc_md = """
@@ -38,7 +38,7 @@ def stack_etl_pipeline_email():
 
     @task
     def extract():
-        engine = sqlalchemy.create_engine('mysql+pymysql://root:PlumberSDE@172.20.0.2:3306/employees')
+        engine = sqlalchemy.create_engine('mysql+pymysql://root:PlumberSDE@172.18.0.2:3306/employees')
 
         df = pd.read_sql_query(r"""
                 select
@@ -68,7 +68,7 @@ def stack_etl_pipeline_email():
 
     @task
     def load():
-        engine = sqlalchemy.create_engine('postgres+psycopg2://plumber:PlumberSDE@172.20.0.2:5433/dw_employee')
+        engine = sqlalchemy.create_engine('postgres+psycopg2://plumber:PlumberSDE@172.18.0.2:5433/dw_employee')
 
         df = pd.read_csv(path_temp_csv)
 
