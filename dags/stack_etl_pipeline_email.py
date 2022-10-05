@@ -37,7 +37,7 @@ description = "Pipeline para o processo de ETL dos ambientes de produção oltp 
 def stack_etl_pipeline_email():
 
     @task.virtualenv(system_site_packages=False,requirements=['pip>=22.2.2','PyMySQL>=1.0.2', 'SQLAlchemy>=1.4.41','pandas>=1.3.5'])
-    def extract():
+    def extract(path_temp_csv):
         import pymysql
         import sqlalchemy
         import pandas as pd
@@ -87,6 +87,6 @@ def stack_etl_pipeline_email():
 
     email_task = EmailOperator(task_id='Notify', to=email_failed, subject='Stack pipeline first finalizado com sucesso', html_content='<p>Salvo em d_employees<p>')
 
-    extract()>>transform()>>load()>>clean()>>email_task
+    extract(path_temp_csv)>>transform()>>load()>>clean()>>email_task
 
 dag = stack_etl_pipeline_email()
