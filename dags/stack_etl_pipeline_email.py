@@ -36,7 +36,7 @@ description = "Pipeline para o processo de ETL dos ambientes de produção oltp 
 @dag(schedule_interval=None, default_args=default_args, catchup=False, tags=['stack', 'email','pipeline'],doc_md=doc_md, description=description)
 def stack_etl_pipeline_email():
 
-    @task.virtualenv(system_site_packages=False,requirements=['PyMySQL>=1.0.2', 'SQLAlchemy>=1.4.41','pandas>=1.5.0'])
+    @task.virtualenv(system_site_packages=False,requirements=['pip>=22.2.2','PyMySQL>=1.0.2', 'SQLAlchemy>=1.4.41','pandas>=1.3.5'])
     def extract():
         import pymysql
         import sqlalchemy
