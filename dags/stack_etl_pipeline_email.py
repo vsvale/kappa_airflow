@@ -64,7 +64,7 @@ def stack_etl_pipeline_email():
         df = df = pd.DataFrame (df_list, columns = ['emp_no', 'first_name','last_name','salary','title'])
         df['name'] = df['first_name']+" "+df['last_name']
         print(df.head(5))
-        df.drop(['emp_no,first_name,last_name'],axis=1,inplace=True)
+        df.drop(['emp_no','first_name','last_name'],axis=1,inplace=True)
         return df
 
     @task
