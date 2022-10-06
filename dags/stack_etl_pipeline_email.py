@@ -40,7 +40,7 @@ def stack_etl_pipeline_email():
 
         print(path)
 
-        engine = sqlalchemy.create_engine('mysql+pymysql://root:PlumberSDE@172.18.0.2:3306/employees')
+        engine = sqlalchemy.create_engine('mysql+pymysql://root:PlumberSDE@172.18.0.3:3306/employees')
         df = pd.read_sql_query(r"""
                 select
                 emp.emp_no,
@@ -72,7 +72,7 @@ def stack_etl_pipeline_email():
         import sqlalchemy
         import pandas as pd
 
-        engine = sqlalchemy.create_engine('postgres+psycopg2://plumber:PlumberSDE@172.18.0.2:5433/dw_employee')
+        engine = sqlalchemy.create_engine('postgres+psycopg2://plumber:PlumberSDE@172.18.0.3:5433/dw_employee')
         df = pd.read_csv(path_temp_csv)
         df.to_sql("d_employees",engine,if_exists="replace",index=False)
 
