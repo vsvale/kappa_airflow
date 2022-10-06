@@ -55,16 +55,16 @@ def stack_etl_pipeline_email():
                 inner join titles
                 on titles.emp_no = emp.emp_no limit 100; """
                 ,engine)
-        return df
+        return df.values.tolist()
+
 
     @task
-    def transform(df):
+    def transform(df_list):
         import pandas as pd
-
+        df = df = pd.DataFrame (df_list, columns = ['emp_no', 'first_name','last_name','salary','title'])
         df['name'] = df['first_name']+" "+df['last_name']
         print(df.head(5))
         df.drop(['emp_no,first_name,last_name'],axis=1,inplace=True)
-        df.to_csv(path_temp_csv, index=False)
         return df
 
     @task
