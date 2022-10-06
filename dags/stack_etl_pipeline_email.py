@@ -30,7 +30,6 @@ description = "Pipeline para o processo de ETL dos ambientes de produção oltp 
 @dag(schedule=None, default_args=default_args, catchup=False, tags=['stack', 'email','pipeline'],doc_md=doc_md, description=description)
 def stack_etl_pipeline_email():
 
-    pwd = BashOperator(task_id=f'pwd', bash_command='pwd')
     @task
     def extract():
         import pymysql
@@ -56,39 +55,30 @@ def stack_etl_pipeline_email():
                 inner join titles
                 on titles.emp_no = emp.emp_no limit 100; """
                 ,engine)
-        df.to_csv(path_temp_csv, index=False)
+        return df
 
     @task
-    def transform():
+    def transform(df):
         import pandas as pd
 
-        df = pd.read_csv(path_temp_csv)
         df['name'] = df['first_name']+" "+df['last_name']
         print(df.head(5))
         df.drop(['emp_no,first_name,last_name'],axis=1,inplace=True)
         df.to_csv(path_temp_csv, index=False)
+        return df
 
     @task
-    def load():
+    def load(df):
         import psycopg2
         import sqlalchemy
         import pandas as pd
 
         engine = sqlalchemy.create_engine('postgres+psycopg2://plumber:PlumberSDE@172.18.0.3:5433/dw_employee')
-        df = pd.read_csv(path_temp_csv)
         df.to_sql("d_employees",engine,if_exists="replace",index=False)
 
-    @task
-    def clean():
-        import os
-
-        try:
-            os.remove(path_temp_csv)
-        except OSError as e:
-            print ("Error: %s - %s." % (e.filename, e.strerror))
 
     email_task = EmailOperator(task_id='Notify', to=email_failed, subject='Stack pipeline first finalizado com sucesso', html_content='<p>Salvo em d_employees<p>')
 
-    extract()>>transform()>>load()>>clean()>>email_task
+    load(transform(extract()))>>email_task
 
 dag = stack_etl_pipeline_email()
