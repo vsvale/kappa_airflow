@@ -1,0 +1,5 @@
+{
+    "DagId":"astronomer_dynamicscalable_2",
+    "Schedule":"'@daily'",
+    "Query":"'SELECT * FROM table2'"
+}

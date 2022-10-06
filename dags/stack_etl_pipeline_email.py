@@ -1,6 +1,7 @@
 from airflow.decorators import dag, task
 from airflow.utils.dates import days_ago
 from airflow.operators.email_operator import EmailOperator
+from airflow.operators.bash_operator import BashOperator
 
 path_temp_csv = "staging.csv"
 email_failed = "viniciusdvale@gmail.com"
@@ -29,6 +30,7 @@ description = "Pipeline para o processo de ETL dos ambientes de produção oltp 
 @dag(schedule=None, default_args=default_args, catchup=False, tags=['stack', 'email','pipeline'],doc_md=doc_md, description=description)
 def stack_etl_pipeline_email():
 
+    pwd = BashOperator(task_id=f'pwd', bash_command='pwd')
     @task
     def extract():
         import pymysql
@@ -87,6 +89,6 @@ def stack_etl_pipeline_email():
 
     email_task = EmailOperator(task_id='Notify', to=email_failed, subject='Stack pipeline first finalizado com sucesso', html_content='<p>Salvo em d_employees<p>')
 
-    extract()>>transform()>>load()>>clean()>>email_task
+    pwd >> extract()>>transform()>>load()>>clean()>>email_task
 
 dag = stack_etl_pipeline_email()
