@@ -43,5 +43,5 @@ def generate_dag(dag_id, start_date, schedule_interval, details):
     return dag
 
 for table, details in tables.items():
-    dag_id = f'dag_{table}'
+    dag_id = f'astronomer_{table}'
     globals()[dag_id] = generate_dag(dag_id,datetime(2022,10,5), details['schedule_interval'],details)
