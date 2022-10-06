@@ -2,7 +2,7 @@ from airflow.decorators import dag, task
 from airflow.utils.dates import days_ago
 from airflow.operators.email_operator import EmailOperator
 
-path_temp_csv = "files/staging.csv"
+path_temp_csv = "/tmp/staging.csv"
 email_failed = "viniciusdvale@gmail.com"
 
 default_args = {
