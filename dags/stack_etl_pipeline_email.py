@@ -3,7 +3,7 @@ from airflow.utils.dates import days_ago
 from airflow.operators.email_operator import EmailOperator
 from airflow.operators.bash_operator import BashOperator
 
-path_temp_csv = "staging.csv"
+path_temp_csv = "/var/lib/rancher/k3s/storage/staging.csv"
 email_failed = "viniciusdvale@gmail.com"
 
 default_args = {
@@ -89,6 +89,6 @@ def stack_etl_pipeline_email():
 
     email_task = EmailOperator(task_id='Notify', to=email_failed, subject='Stack pipeline first finalizado com sucesso', html_content='<p>Salvo em d_employees<p>')
 
-    pwd >> extract()>>transform()>>load()>>clean()>>email_task
+    extract()>>transform()>>load()>>clean()>>email_task
 
 dag = stack_etl_pipeline_email()
