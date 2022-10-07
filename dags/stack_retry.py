@@ -1,7 +1,6 @@
 from airflow.decorators import dag, task
 from airflow.utils.dates import days_ago
 from datetime import datetime, timedelta
-from airflow.operators.bash_operator import BashOperator
 
 default_args = {
     'start_date': days_ago(1),
@@ -10,7 +9,7 @@ default_args = {
 
 description = "A DAG exemplo de retryes"
 
-@dag(schedule=timedelta(days=2), default_args=default_args, catchup=False, tags=['stack', 'retry'], owner= 'stack', description = description)
+@dag(schedule=timedelta(days=2), default_args=default_args, catchup=False, tags=['stack', 'retry'], description = description)
 def stack_retry():
     @task(retries=10, retry_delay=timedelta(seconds=5))
     def random_number():
