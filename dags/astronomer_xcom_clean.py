@@ -1,5 +1,7 @@
 from airflow.decorators import dag, task
 from airflow.utils.dates import days_ago
+from airflow.providers.postgres.operators.postgres import PostgresOperator
+from symbol import parameters
 
 default_args = {
     'start_date': days_ago(1)
@@ -15,5 +17,8 @@ def astronomer_xcom_clean():
     def process(data):
         print(data)
 
-    process(extract())
+    clean_xcoms = PostgresOperator(task_id='clean_xcom', postgres_conn_id='postgres',sql='sql/delete_xcom.sql', parameters = {'dag_id':'astronomer_xcom_clean'})
+
+    #create postgres connection on airflow, use ClusterIP as host
+    process(extract()) >> clean_xcoms
 dag = astronomer_xcom_clean()

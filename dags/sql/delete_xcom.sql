@@ -1,0 +1,1 @@
+DELETE FROM xcom where dag_id=%(dag_id)s;
