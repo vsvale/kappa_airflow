@@ -23,7 +23,7 @@ def astronomer_xcom_clean():
 
     clean_xcoms = PostgresOperator(task_id='clean_xcom', postgres_conn_id='postgres',sql='sql/delete_xcom.sql', parameters = {'dag_id':'astronomer_xcom_clean'})
 
-    clean_xcoms_var = CustomPostgresOperator(task_id='clean_xcom', postgres_conn_id='postgres',sql='sql/delete_xcom.sql', parameters = {'dag_id':'{{ var.value.dag_to_clean }}}'})
+    clean_xcoms_var = CustomPostgresOperator(task_id='clean_xcom_var', postgres_conn_id='postgres',sql='sql/delete_xcom.sql', parameters = {'dag_id':'{{ var.value.dag_to_clean }}}'})
     # create variable dag_to_clean:astronomer_xcom_clean
 
     # create postgres connection on airflow, use ClusterIP as host
