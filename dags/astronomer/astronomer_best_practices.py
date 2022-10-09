@@ -21,10 +21,10 @@ description = "DAG in charge of training ml models"
 
 def astronomer_best_practices():
 
-    @task
     def clean():
         print('clean envoriment')
-        
+
+    @task
     def ml():
         clean()
         print("process with ml a")
