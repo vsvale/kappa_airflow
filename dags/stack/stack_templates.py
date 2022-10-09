@@ -14,6 +14,7 @@ description = "A DAG exemplo de template"
 def stack_templates():
     dt_exec = BashOperator(task_id='dt_exec', bash_command="echo data de execucao: {{ execution_date }}")
     dt_strf = BashOperator(task_id='dt_strf', bash_command="echo data de execucao formatada: {{ execution_date.strftime('%d/%m/%Y') }}")
+    script = BashOperator(task_id='script', bash_command="/scripts/test.sh", env={'execution_date':'{{ ds }}'})
 
-    dt_exec>>dt_strf
+    dt_exec>>dt_strf>>script
 dag = stack_templates()
