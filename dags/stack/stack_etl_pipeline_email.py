@@ -1,8 +1,16 @@
 from airflow.decorators import dag, task
 from airflow.utils.dates import days_ago
 from airflow.operators.email_operator import EmailOperator
+import pandas as pd
+from minio import Minio
+    
+client = Minio(
+        "minio.deepstorage.svc.cluster.local",
+        access_key={{  var.value.minio_access_key }},
+        secret_key={{  var.value.minio_secret_key }},
+        secure=True
+        )
 
-path_temp_csv = "https://minio.deepstorage.svc.cluster.local/landing/airflow/staging.csv?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=08XGXX1OOSDUXE2HXL1F%2F20221010%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20221010T115916Z&X-Amz-Expires=604799&X-Amz-Security-Token=eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3NLZXkiOiIwOFhHWFgxT09TRFVYRTJIWEwxRiIsImV4cCI6MTY2NTQwNjUyOCwicG9saWN5IjoiY29uc29sZUFkbWluIn0.mnLbG3PkLlsd1IEkt9bf64N7smEYv1bIh23Wf5kdHA5UPyPL9jEj368etTa1bvNX9DpPf_rfjQRPO2U3zDciWw&X-Amz-SignedHeaders=host&versionId=null&X-Amz-Signature=611614c76e7c664b3fff009d47e005ef69fc2cda40a0afe4acbd552bfb923120"
 email_failed = "viniciusdvale@gmail.com"
 
 default_args = {
@@ -33,12 +41,7 @@ def stack_etl_pipeline_email():
     def extract():
         import pymysql
         import sqlalchemy
-        import pandas as pd
-        import os
-
-        path = os.getcwd()
-
-        print(path)
+        from io import BytesIO
 
         engine = sqlalchemy.create_engine('mysql+pymysql://root:PlumberSDE@172.18.0.2:3306/employees')
         df = pd.read_sql_query(r"""
@@ -54,12 +57,17 @@ def stack_etl_pipeline_email():
                 inner join titles
                 on titles.emp_no = emp.emp_no limit 100; """
                 ,engine)
-        df.to_csv(path_temp_csv, index=False)
+        csv = df.to_csv(index=False).encode('utf-8')
+        client.put_object(
+        "landing",
+        "airflow/staging.csv",
+        data=BytesIO(csv),
+        length=len(csv),
+        content_type='application/csv'
+        )
 
     @task
     def transform():
-        import pandas as pd
-
         df = pd.read_csv(path_temp_csv)
         df['name'] = df['first_name']+" "+df['last_name']
         print(df.head(5))
@@ -70,7 +78,6 @@ def stack_etl_pipeline_email():
     def load():
         import psycopg2
         import sqlalchemy
-        import pandas as pd
 
         engine = sqlalchemy.create_engine('postgres+psycopg2://plumber:PlumberSDE@172.18.0.3:5433/dw_employee')
         df = pd.read_csv(path_temp_csv)

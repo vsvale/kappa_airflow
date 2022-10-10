@@ -16,7 +16,13 @@ def stack_api():
     @task
     import requests
     import pandas as pd
-
+    from minio import Minio
+    client = Minio(
+    "storage.centerville.oak-tree.tech",
+    access_key={{  var.value.minio_access_key }},
+    secret_key={{  var.value.minio_secret_key }},
+    secure=True
+    )
     api_key = {{  var.value.api_key }}
     url = 'https://api.polygon.io/v2/aggs/ticker/AAPL/range/1/day/{}/{}?apiKey={}'.format({{ yesterday_ds }},{{ ds }},api_key)
     response = requests.get(url)
