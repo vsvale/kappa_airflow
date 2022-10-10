@@ -3,16 +3,15 @@ from airflow.utils.dates import days_ago
 from datetime import timedelta
 
 default_args = {
-    'owner':'me',
+#    'owner':'me',
     'start_date': days_ago(1),
-    'retries':1,
-    'retry_delay': timedelta(minutes=5)
+ #   'retries':1,
+ #   'retry_delay': timedelta(minutes=5)
 }
 
 @dag(
     schedule_interval='@daily', default_args=default_args, catchup=False,
-    description="A simple example DAG", tags=['EDX', 'IBM']
-)
+    description="A simple example DAG", tags=['EDX', 'IBM'])
 def edx_ibm_simple_example():
 
     @task
@@ -23,5 +22,5 @@ def edx_ibm_simple_example():
     def print_date():
         print("{{ ds }}")
 
-    print_hello() >> print_date
+    print_hello() >> print_date()
 dag = edx_ibm_simple_example()
