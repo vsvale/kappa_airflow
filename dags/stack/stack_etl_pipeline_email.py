@@ -2,7 +2,7 @@ from airflow.decorators import dag, task
 from airflow.utils.dates import days_ago
 from airflow.operators.email_operator import EmailOperator
 
-path_temp_csv = "/tmp/staging.csv"
+path_temp_csv = "https://minio.deepstorage.svc.cluster.local/landing/airflow/staging.csv?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=08XGXX1OOSDUXE2HXL1F%2F20221010%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20221010T115916Z&X-Amz-Expires=604799&X-Amz-Security-Token=eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3NLZXkiOiIwOFhHWFgxT09TRFVYRTJIWEwxRiIsImV4cCI6MTY2NTQwNjUyOCwicG9saWN5IjoiY29uc29sZUFkbWluIn0.mnLbG3PkLlsd1IEkt9bf64N7smEYv1bIh23Wf5kdHA5UPyPL9jEj368etTa1bvNX9DpPf_rfjQRPO2U3zDciWw&X-Amz-SignedHeaders=host&versionId=null&X-Amz-Signature=611614c76e7c664b3fff009d47e005ef69fc2cda40a0afe4acbd552bfb923120"
 email_failed = "viniciusdvale@gmail.com"
 
 default_args = {
@@ -40,7 +40,7 @@ def stack_etl_pipeline_email():
 
         print(path)
 
-        engine = sqlalchemy.create_engine('mysql+pymysql://root:PlumberSDE@172.18.0.3:3306/employees')
+        engine = sqlalchemy.create_engine('mysql+pymysql://root:PlumberSDE@172.18.0.2:3306/employees')
         df = pd.read_sql_query(r"""
                 select
                 emp.emp_no,
