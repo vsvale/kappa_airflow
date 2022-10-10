@@ -4,13 +4,6 @@ from airflow.operators.email_operator import EmailOperator
 import pandas as pd
 from minio import Minio
     
-client = Minio(
-        "minio.deepstorage.svc.cluster.local",
-        access_key={{  var.value.minio_access_key }},
-        secret_key={{  var.value.minio_secret_key }},
-        secure=True
-        )
-
 email_failed = "viniciusdvale@gmail.com"
 
 default_args = {
@@ -36,6 +29,12 @@ description = "Pipeline para o processo de ETL dos ambientes de produção oltp 
 
 @dag(schedule=None, default_args=default_args, catchup=False, tags=['stack', 'email','pipeline'],doc_md=doc_md, description=description)
 def stack_etl_pipeline_email():
+    client = Minio(
+        "minio.deepstorage.svc.cluster.local",
+        access_key={{ var.value.minio_access_key }},
+        secret_key={{ var.value.minio_secret_key }},
+        secure=True
+        )
 
     @task
     def extract():
