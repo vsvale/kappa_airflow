@@ -31,8 +31,8 @@ description = "Pipeline para o processo de ETL dos ambientes de produção oltp 
 def stack_etl_pipeline_email():
     client = Minio(
         "minio.deepstorage.svc.cluster.local",
-        access_key={{ var.value.minio_access_key }},
-        secret_key={{ var.value.minio_secret_key }},
+        access_key="{{ var.value.minio_access_key }}",
+        secret_key="{{ var.value.minio_secret_key }}",
         secure=True
         )
 
