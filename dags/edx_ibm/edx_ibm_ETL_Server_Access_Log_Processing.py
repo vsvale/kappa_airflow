@@ -18,24 +18,25 @@ def edx_ibm_ETL_Server_Access_Log_Processing():
         url = 'https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBM-DB0250EN-SkillsNetwork/labs/Apache%20Airflow/Build%20a%20DAG%20using%20Airflow/web-server-access-log.txt'
         response = requests.get(url)
         open("web-server-access-log.txt", "wb").write(response.content)
-        df = pd.read_csv("web-server-access-log.txt", header='infer', delimiter="#")
-        return df
     
     @task
-    def extract(df):
+    def extract():
+        df = pd.read_csv("web-server-access-log.txt", header='infer', delimiter="#")
         df = df[['timestamp','visitorid']]
-        return df
+        df.to_csv("extract.csv", index=False)
 
     @task
-    def transform(df):
+    def transform():
+        df = pd.read_csv("extract.csv", header='infer')
         df['visitorid'] = df['visitorid'].str.upper()
-        return df
+        df.to_csv("transform.csv", index=False)
 
     @task
-    def load(df):
+    def load():
+        df = pd.read_csv("transform.csv", header='infer')
         df.to_csv("web-server-access-log.csv.zip", 
            index=False, 
            compression="zip")
 
-    load(transform(extract(download())))
+    download()>>extract()>>transform()>>load()
 dag = edx_ibm_ETL_Server_Access_Log_Processing()
