@@ -25,7 +25,7 @@ default_args = {
 
 # define the DAG
 dag = DAG(
-    'my-first-dag',
+    'edx_ibm_my_first_dag',
     default_args=default_args,
     description='My first DAG',
     schedule_interval=timedelta(days=1),
