@@ -15,44 +15,40 @@ default_args = {
     'owner': 'Ramesh Sannareddy',
     'start_date': days_ago(0),
     'email': ['ramesh@somemail.com'],
-    'email_on_failure': True,
-    'email_on_retry': True,
+    'email_on_failure': False,
+    'email_on_retry': False,
     'retries': 1,
     'retry_delay': timedelta(minutes=5),
 }
 
+# defining the DAG
+
 # define the DAG
 dag = DAG(
-    dag_id='edx_ibm_dag_anatomy',
+    'my-first-dag',
     default_args=default_args,
-    description='Sample ETL DAG using Bash',
+    description='My first DAG',
     schedule_interval=timedelta(days=1),
 )
 
 # define the tasks
 
-# define the first task named extract
+# define the first task
+
 extract = BashOperator(
     task_id='extract',
-    bash_command='echo "extract"',
+    bash_command='cut -d":" -f1,3,6 /etc/passwd > /home/project/airflow/dags/extracted-data.txt',
     dag=dag,
 )
 
 
-# define the second task named transform
-transform = BashOperator(
+# define the second task
+transform_and_load = BashOperator(
     task_id='transform',
-    bash_command='echo "transform"',
+    bash_command='tr ":" "," < /home/project/airflow/dags/extracted-data.txt > /home/project/airflow/dags/transformed-data.csv',
     dag=dag,
 )
 
-# define the third task named load
-
-load = BashOperator(
-    task_id='load',
-    bash_command='echo "load"',
-    dag=dag,
-)
 
 # task pipeline
-extract >> transform >> load
+extract >> transform_and_load
