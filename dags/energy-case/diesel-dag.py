@@ -3,16 +3,14 @@
 # create connectivity to minio on airflow ui [connections]
 # create connectivity to yugabyte on airflow ui [connections]
 
-from airflow.decorators import dag, task
-from airflow.providers.amazon.aws.sensors.s3_key import S3KeySensor
-from airflow.providers.amazon.aws.operators.s3_delete_objects import S3DeleteObjectsOperator
+from airflow.decorators import dag
 from airflow.providers.cncf.kubernetes.operators.spark_kubernetes import SparkKubernetesOperator
 from airflow.providers.cncf.kubernetes.sensors.spark_kubernetes import SparkKubernetesSensor
 from datetime import datetime, timedelta
 
 default_args = {
     'owner': 'vale',
-    'start_date': datetime(2022, 10, 19),
+    'start_date': datetime(2022, 10, 18),
     'depends_on_past': False,
     'email': ['viniciusdvalea@gmail.com'],
     'email_on_failure': False,
