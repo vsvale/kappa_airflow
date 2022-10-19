@@ -17,7 +17,7 @@ spec:
     onSubmissionFailureRetries: 5
     onSubmissionFailureRetryInterval: 20
   hadoopConf:
-    "fs.s3a.endpoint": "http://172.18.0.2:9090"
+    "fs.s3a.endpoint": "http://172.18.0.2:9000"
     "fs.s3a.access.key": "LBGipuLnLkJgwjXE"
     "fs.s3a.secret.key": "WjnPIFgPIhsjeFSgyvo0vurlMNfjDWyV"
 
