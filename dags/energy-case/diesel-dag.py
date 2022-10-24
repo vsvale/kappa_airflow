@@ -16,7 +16,10 @@ default_args = {
     'email_on_failure': False,
     'email_on_retry': False,
     'retries': 1,
-    'retry_delay': timedelta(minutes=5)}
+    'retry_delay': timedelta(minutes=5),
+    'catchup':False,
+    'max_active_runs':1
+    }
 
 @dag(schedule='@daily', default_args=default_args, catchup=False, tags=['energycase ', 'plumbers','api'])
 def energy_case():
