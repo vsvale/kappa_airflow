@@ -32,8 +32,8 @@ def example_customer_bronze():
     bucket_name=LANDING_ZONE,
     bucket_key='example/src-example-customer/2022/11/07/15/exaple.parquet',
     wildcard_match=True,
-    timeout=18 * 60 * 60,
-    poke_interval=120,
+    timeout= 60,
+    poke_interval=60,
     aws_conn_id='minio')
 
     verify_customer_landing
