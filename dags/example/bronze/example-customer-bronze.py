@@ -22,18 +22,15 @@ default_args = {
 
 description = "DAG in charge of training ml models"
 
-@dag(
-    schedule_interval='@daily',
-    default_args=default_args,
-     catchup=False,
-     tags=['example','spark','customer','s3','sensor','k8s'],
-     description=description)
+@dag(schedule_interval='@daily', default_args=default_args,catchup=False,
+tags=['example','spark','customer','s3','sensor','k8s'],description=description)
+
 def customer_bronze():
     # verify if new data has arrived on landing bucket
     verify_customer_landing = S3KeySensor(
     task_id='t_verify_customer_landing',
     bucket_name=LANDING_ZONE,
-    bucket_key='landing/example/src-example-customer/2022/11/07/15/*.parquet',
+    bucket_key='example/src-example-customer/2022/11/07/15/*.parquet',
     wildcard_match=True,
     timeout=18 * 60 * 60,
     poke_interval=120,
