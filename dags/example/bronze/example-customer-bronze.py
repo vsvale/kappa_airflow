@@ -30,7 +30,7 @@ def example_customer_bronze():
     verify_customer_landing = S3KeySensor(
     task_id='t_verify_customer_landing',
     bucket_name=LANDING_ZONE,
-    bucket_key='example/src-example-customer/2022/11/07/15/*.parquet',
+    bucket_key='example/src-example-customer/2022/11/07/*/*.parquet',
     wildcard_match=True,
     timeout=18 * 60 * 60,
     poke_interval=120,
