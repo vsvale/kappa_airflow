@@ -25,7 +25,7 @@ description = "DAG in charge of training ml models"
 @dag(schedule_interval='@daily', default_args=default_args,catchup=False,
 tags=['example','spark','customer','s3','sensor','k8s'],description=description)
 
-def customer_bronze():
+def example_customer_bronze():
     # verify if new data has arrived on landing bucket
     verify_customer_landing = S3KeySensor(
     task_id='t_verify_customer_landing',
@@ -35,5 +35,6 @@ def customer_bronze():
     timeout=18 * 60 * 60,
     poke_interval=120,
     aws_conn_id='minio')
+
     verify_customer_landing
-dag = customer_bronze()
+dag = example_customer_bronze()
