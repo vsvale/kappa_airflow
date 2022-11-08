@@ -36,5 +36,20 @@ def example_customer_bronze():
     poke_interval=120,
     aws_conn_id='minio')
 
-    verify_customer_landing
+    # use spark-on-k8s to operate against the data
+    landing_customer_spark_operator = SparkKubernetesOperator(
+    task_id='t_landing_customer_spark_operator',
+    namespace='processing',
+    application_file='example-customer-bronze.yaml',
+    kubernetes_conn_id='kubeconnect',
+    do_xcom_push=True)
+
+    # monitor spark application using sensor to determine the outcome of the task
+    monitor_landing_customer_spark = SparkKubernetesSensor(
+    task_id='t_monitor_landing_customer_spark',
+    namespace="processing",
+    application_name="{{ task_instance.xcom_pull(task_ids='t_landing_customer_spark_operator')['metadata']['name'] }}",
+    kubernetes_conn_id="kubeconnect")
+
+    verify_customer_landing >> landing_customer_spark_operator >> monitor_landing_customer_spark
 dag = example_customer_bronze()
