@@ -8,7 +8,6 @@ from airflow.providers.amazon.aws.operators.s3_delete_objects import S3DeleteObj
 from airflow.providers.cncf.kubernetes.operators.spark_kubernetes import SparkKubernetesOperator
 from airflow.providers.cncf.kubernetes.sensors.spark_kubernetes import SparkKubernetesSensor
 from airflow.providers.amazon.aws.operators.s3_list import S3ListOperator
-from airflow.sensors.external_task import ExternalTaskSensor
 
 LAKEHOUSE = getenv("LAKEHOUSE", "lakehouse")
 
@@ -29,14 +28,7 @@ description = "DAG to create dim and facts and save in silver"
 @dag(schedule='@daily', default_args=default_args,catchup=False,
 tags=['example','spark','silver','s3','sensor','k8s'],description=description)
 def example_silver():
-    wait_for_bronze = ExternalTaskSensor(
-        task_id='wait_for_bronze',
-        external_dag_id='example_bronze',
-        external_task_id='salesorderdetail_bronze.t_list_bronze_example_salesorderdetail_folder',
-        start_date=days_ago(1),
-        timeout=3600,
-        )
-    
+   
     @task_group()
     def dimcustomer_silver():
         # verify if new data has arrived on bronze bucket
@@ -68,5 +60,5 @@ def example_silver():
         aws_conn_id='minio')
 
         [verify_customer_bronze,verify_customeraddress_bronze,verify_address_bronze]
-    wait_for_bronze >> dimcustomer_silver()
+    dimcustomer_silver()
 dag = example_silver()
