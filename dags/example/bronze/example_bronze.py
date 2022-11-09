@@ -24,10 +24,10 @@ default_args = {
     'retry_delay': timedelta(minutes=5),
     'max_active_run': 1}
 
-description = "DAG in charge of training ml models"
+description = "DAG to convert lading to delta and save it in lakehouse bronze"
 
 @dag(schedule='@daily', default_args=default_args,catchup=False,
-tags=['example','spark','customer','s3','sensor','k8s'],description=description)
+tags=['example','spark','bronze','s3','sensor','k8s'],description=description)
 
 def example_bronze():
     @task_group()
