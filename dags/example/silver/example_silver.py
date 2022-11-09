@@ -32,7 +32,7 @@ def example_silver():
     wait_for_bronze = ExternalTaskSensor(
         task_id='wait_for_bronze',
         external_dag_id='example_bronze',
-        external_task_id='t_list_bronze_example_salesorderdetail_folder',
+        external_task_id='salesorderdetail_bronze.t_list_bronze_example_salesorderdetail_folder',
         start_date=days_ago(1),
         timeout=3600,
         )
