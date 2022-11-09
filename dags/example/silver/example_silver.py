@@ -26,6 +26,8 @@ default_args = {
 
 description = "DAG to create dim and facts and save in silver"
 
+@dag(schedule='@daily', default_args=default_args,catchup=False,
+tags=['example','spark','silver','s3','sensor','k8s'],description=description)
 def example_silver():
     wait_for_bronze = ExternalTaskSensor(
         task_id='wait_for_bronze',
