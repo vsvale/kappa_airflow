@@ -7,8 +7,11 @@ from airflow.providers.amazon.aws.sensors.s3_key import S3KeySensor
 from airflow.providers.amazon.aws.operators.s3_delete_objects import S3DeleteObjectsOperator
 from airflow.providers.cncf.kubernetes.operators.spark_kubernetes import SparkKubernetesOperator
 from airflow.providers.cncf.kubernetes.sensors.spark_kubernetes import SparkKubernetesSensor
+from airflow.providers.amazon.aws.operators.s3_list import S3ListOperator
 
 LANDING_ZONE = getenv("LANDING_ZONE", "landing")
+LAKEHOUSE = getenv("LAKEHOUSE", "lakehouse")
+
 
 default_args = {
     'owner': 'vinicius da silva vale',
@@ -51,7 +54,7 @@ def example_customer_bronze():
     application_name="{{ task_instance.xcom_pull(task_ids='t_bronze_customer_spark_operator')['metadata']['name'] }}",
     kubernetes_conn_id="kubeconnect")
 
-    # use spark-on-k8s to operate against the data
+    # verify count source and destination
     bronze_customer_spark_operator_verify = SparkKubernetesOperator(
     task_id='t_bronze_customer_spark_operator_verify',
     namespace='processing',
@@ -66,6 +69,16 @@ def example_customer_bronze():
     application_name="{{ task_instance.xcom_pull(task_ids='t_bronze_customer_spark_operator_verify')['metadata']['name'] }}",
     kubernetes_conn_id="kubeconnect")
 
+    # Confirm files are created
+    list_bronze_example_customer_folder = S3ListOperator(
+        task_id='t_list_bronze_example_customer_folder',
+        bucket=LAKEHOUSE,
+        prefix='bronze/example/customer',
+        delimiter='/',
+        aws_conn_id='minio',
+        do_xcom_push=True)    
+
+
     verify_customer_landing >> bronze_customer_spark_operator >> monitor_bronze_customer_spark_operator >> bronze_customer_spark_operator_verify
-    bronze_customer_spark_operator_verify >> monitor_bronze_customer_spark_operator_verify
+    bronze_customer_spark_operator_verify >> monitor_bronze_customer_spark_operator_verify >> list_bronze_example_customer_folder
 dag = example_customer_bronze()
