@@ -34,7 +34,6 @@ def example_silver():
         external_dag_id='example_bronze',
         external_task_id='t_list_bronze_example_salesorderdetail_folder',
         start_date=days_ago(1),
-        execution_delta=timedelta(hours=1),
         timeout=3600,
         )
     
