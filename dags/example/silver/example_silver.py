@@ -59,6 +59,30 @@ def example_silver():
         poke_interval=120,
         aws_conn_id='minio')
 
-        [verify_customer_bronze,verify_customeraddress_bronze,verify_address_bronze]
+        # use spark-on-k8s to operate against the data
+        silver_dimcustomer_spark_operator = SparkKubernetesOperator(
+        task_id='t_silver_dimcustomer_spark_operator',
+        namespace='processing',
+        application_file='example-dimcustomer-silver.yaml',
+        kubernetes_conn_id='kubeconnect',
+        do_xcom_push=True)
+
+        # monitor spark application using sensor to determine the outcome of the task
+        monitor_silver_dimcustomer_spark_operator = SparkKubernetesSensor(
+        task_id='t_monitor_silver_dimcustomer_spark_operator',
+        namespace="processing",
+        application_name="{{ task_instance.xcom_pull(task_ids='dimcustomer_silver.t_silver_dimcustomer_spark_operator')['metadata']['name'] }}",
+        kubernetes_conn_id="kubeconnect")
+
+        # Confirm files are created
+        list_silver_example_dimcustomer_folder = S3ListOperator(
+        task_id='t_list_silver_example_dimcustomer_folder',
+        bucket=LAKEHOUSE,
+        prefix='silver/example/dimcustomer',
+        delimiter='/',
+        aws_conn_id='minio',
+        do_xcom_push=True)    
+
+        [verify_customer_bronze,verify_customeraddress_bronze,verify_address_bronze] >> silver_dimcustomer_spark_operator >> monitor_silver_dimcustomer_spark_operator >> list_silver_example_dimcustomer_folder
     dimcustomer_silver()
 dag = example_silver()
