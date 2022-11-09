@@ -8,7 +8,7 @@ from airflow.providers.amazon.aws.operators.s3_delete_objects import S3DeleteObj
 from airflow.providers.cncf.kubernetes.operators.spark_kubernetes import SparkKubernetesOperator
 from airflow.providers.cncf.kubernetes.sensors.spark_kubernetes import SparkKubernetesSensor
 from airflow.providers.amazon.aws.operators.s3_list import S3ListOperator
-from airflow.operators.sensors import ExternalTaskSensor
+from airflow.sensors.external_task import ExternalTaskSensor
 
 LAKEHOUSE = getenv("LAKEHOUSE", "lakehouse")
 
