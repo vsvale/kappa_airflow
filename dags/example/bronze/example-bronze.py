@@ -410,6 +410,8 @@ def example():
 
         verify_salesorderdetail_landing >> bronze_salesorderdetail_spark_operator >> monitor_bronze_salesorderdetail_spark_operator >> list_bronze_example_salesorderdetail_folder
 
-    [customer_bronze(),address_bronze()] >> customeraddress_bronze() >> salesorderheader_bronze() >> salesorderdetail_bronze()
-    [productcategory_bronze(),productmodel_bronze(), productdescription_bronze()] >> productmodelproductdescription_bronze() >> product_bronze() >> salesorderdetail_bronze()
+    
+    bronze1 = [customer_bronze(),address_bronze()] >> customeraddress_bronze() >> salesorderheader_bronze()
+    bronze2 = [productcategory_bronze(),productmodel_bronze(), productdescription_bronze()] >> productmodelproductdescription_bronze() >> product_bronze()
+    [bronze2, bronze2] >> salesorderdetail_bronze()
 dag = example()
