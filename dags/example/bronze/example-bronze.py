@@ -28,9 +28,9 @@ description = "DAG in charge of training ml models"
 @dag(schedule='@daily', default_args=default_args,catchup=False,
 tags=['example','spark','customer','s3','sensor','k8s'],description=description)
 
-def example_bronze():
+def example():
     @task_group()
-    def example_customer_bronze():
+    def customer_bronze():
         # verify if new data has arrived on landing bucket
         verify_customer_landing = S3KeySensor(
         task_id='t_verify_customer_landing',
@@ -66,5 +66,45 @@ def example_bronze():
         do_xcom_push=True)    
 
         verify_customer_landing >> bronze_customer_spark_operator >> monitor_bronze_customer_spark_operator >> list_bronze_example_customer_folder
-    example_customer_bronze()
-dag = example_bronze()
+    
+    @task_group()
+    def address_bronze():
+        # verify if new data has arrived on landing bucket
+        verify_address_landing = S3KeySensor(
+        task_id='t_verify_address_landing',
+        bucket_name=LANDING_ZONE,
+        bucket_key='example/src-example-address/*/*.parquet',
+        wildcard_match=True,
+        timeout=18 * 60 * 60,
+        poke_interval=120,
+        aws_conn_id='minio')
+
+        # use spark-on-k8s to operate against the data
+        bronze_address_spark_operator = SparkKubernetesOperator(
+        task_id='t_bronze_address_spark_operator',
+        namespace='processing',
+        application_file='example-address-bronze.yaml',
+        kubernetes_conn_id='kubeconnect',
+        do_xcom_push=True)
+
+        # monitor spark application using sensor to determine the outcome of the task
+        monitor_bronze_address_spark_operator = SparkKubernetesSensor(
+        task_id='t_monitor_bronze_address_spark_operator',
+        namespace="processing",
+        application_name="{{ task_instance.xcom_pull(task_ids='example_address_bronze.t_bronze_address_spark_operator')['metadata']['name'] }}",
+        kubernetes_conn_id="kubeconnect")
+
+        # Confirm files are created
+        list_bronze_example_address_folder = S3ListOperator(
+        task_id='t_list_bronze_example_address_folder',
+        bucket=LAKEHOUSE,
+        prefix='bronze/example/address',
+        delimiter='/',
+        aws_conn_id='minio',
+        do_xcom_push=True)    
+
+        verify_address_landing >> bronze_address_spark_operator >> monitor_bronze_address_spark_operator >> list_bronze_example_address_folder
+
+    
+    [customer_bronze(),address_bronze()]
+dag = example()
