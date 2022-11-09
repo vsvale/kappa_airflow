@@ -54,7 +54,7 @@ def example():
         monitor_bronze_customer_spark_operator = SparkKubernetesSensor(
         task_id='t_monitor_bronze_customer_spark_operator',
         namespace="processing",
-        application_name="{{ task_instance.xcom_pull(task_ids='example_customer_bronze.t_bronze_customer_spark_operator')['metadata']['name'] }}",
+        application_name="{{ task_instance.xcom_pull(task_ids='customer_bronze.t_bronze_customer_spark_operator')['metadata']['name'] }}",
         kubernetes_conn_id="kubeconnect")
 
         # Confirm files are created
@@ -92,7 +92,7 @@ def example():
         monitor_bronze_address_spark_operator = SparkKubernetesSensor(
         task_id='t_monitor_bronze_address_spark_operator',
         namespace="processing",
-        application_name="{{ task_instance.xcom_pull(task_ids='example_address_bronze.t_bronze_address_spark_operator')['metadata']['name'] }}",
+        application_name="{{ task_instance.xcom_pull(task_ids='address_bronze.t_bronze_address_spark_operator')['metadata']['name'] }}",
         kubernetes_conn_id="kubeconnect")
 
         # Confirm files are created
