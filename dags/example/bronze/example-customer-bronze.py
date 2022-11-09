@@ -53,7 +53,7 @@ def example_bronze():
         monitor_bronze_customer_spark_operator = SparkKubernetesSensor(
         task_id='t_monitor_bronze_customer_spark_operator',
         namespace="processing",
-        application_name="{{ task_instance.xcom_pull(task_ids='t_bronze_customer_spark_operator')['metadata']['name'] }}",
+        application_name="{{ task_instance.xcom_pull(task_ids='example_customer_bronze.t_bronze_customer_spark_operator')['metadata']['name'] }}",
         kubernetes_conn_id="kubeconnect")
 
         # verify count source and destination
@@ -68,7 +68,7 @@ def example_bronze():
         monitor_bronze_customer_spark_operator_verify = SparkKubernetesSensor(
         task_id='t_monitor_bronze_customer_spark_operator_verify',
         namespace="processing",
-        application_name="{{ task_instance.xcom_pull(task_ids='t_bronze_customer_spark_operator_verify')['metadata']['name'] }}",
+        application_name="{{ task_instance.xcom_pull(task_ids='example_customer_bronze.t_bronze_customer_spark_operator_verify')['metadata']['name'] }}",
         kubernetes_conn_id="kubeconnect")
 
         # Confirm files are created
