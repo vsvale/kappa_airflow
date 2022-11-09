@@ -29,7 +29,7 @@ description = "DAG in charge of training ml models"
 @dag(schedule='@daily', default_args=default_args,catchup=False,
 tags=['example','spark','customer','s3','sensor','k8s'],description=description)
 
-def example():
+def example_bronze():
     @task_group()
     def customer_bronze():
         # verify if new data has arrived on landing bucket
@@ -409,9 +409,9 @@ def example():
         do_xcom_push=True)    
 
         verify_salesorderdetail_landing >> bronze_salesorderdetail_spark_operator >> monitor_bronze_salesorderdetail_spark_operator >> list_bronze_example_salesorderdetail_folder
-
+    
     
     bronze1 = [customer_bronze(),address_bronze()] >> customeraddress_bronze() >> salesorderheader_bronze()
     bronze2 = [productcategory_bronze(),productmodel_bronze(), productdescription_bronze()] >> productmodelproductdescription_bronze() >> product_bronze()
     [bronze1, bronze2] >> salesorderdetail_bronze()
-dag = example()
+dag = example_bronze()
