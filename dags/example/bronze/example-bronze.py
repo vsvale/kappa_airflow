@@ -21,7 +21,8 @@ default_args = {
     'email_on_failure': False,
     'email_on_retry': False,
     'retries': 1,
-    'retry_delay': timedelta(minutes=5)}
+    'retry_delay': timedelta(minutes=5),
+    'max_active_run': 1}
 
 description = "DAG in charge of training ml models"
 
