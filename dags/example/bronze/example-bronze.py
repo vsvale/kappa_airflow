@@ -413,5 +413,5 @@ def example():
     
     bronze1 = [customer_bronze(),address_bronze()] >> customeraddress_bronze() >> salesorderheader_bronze()
     bronze2 = [productcategory_bronze(),productmodel_bronze(), productdescription_bronze()] >> productmodelproductdescription_bronze() >> product_bronze()
-    [bronze2, bronze2] >> salesorderdetail_bronze()
+    [bronze1, bronze2] >> salesorderdetail_bronze()
 dag = example()
