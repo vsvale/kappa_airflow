@@ -35,5 +35,37 @@ def example_silver():
         execution_delta=timedelta(hours=1),
         timeout=3600,
         )
-    wait_for_bronze
+    
+    @task_group()
+    def dimcustomer_silver():
+        # verify if new data has arrived on bronze bucket
+        verify_customer_bronze = S3KeySensor(
+        task_id='t_verify_customer_bronze',
+        bucket_name=LAKEHOUSE,
+        bucket_key='bronze/example/customer/*/*.parquet',
+        wildcard_match=True,
+        timeout=18 * 60 * 60,
+        poke_interval=120,
+        aws_conn_id='minio')
+
+        verify_customeraddress_bronze = S3KeySensor(
+        task_id='t_verify_customeraddress_bronze',
+        bucket_name=LAKEHOUSE,
+        bucket_key='bronze/example/customeraddress/*/*.parquet',
+        wildcard_match=True,
+        timeout=18 * 60 * 60,
+        poke_interval=120,
+        aws_conn_id='minio')
+
+        verify_address_bronze = S3KeySensor(
+        task_id='t_verify_address_bronze',
+        bucket_name=LAKEHOUSE,
+        bucket_key='bronze/example/address/*/*.parquet',
+        wildcard_match=True,
+        timeout=18 * 60 * 60,
+        poke_interval=120,
+        aws_conn_id='minio')
+
+        [verify_customer_bronze,verify_customeraddress_bronze,verify_address_bronze]
+    wait_for_bronze >> dimcustomer_silver()
 dag = example_silver()
