@@ -34,7 +34,7 @@ def example_gold():
         verify_currency_silver = S3KeySensor(
         task_id='t_verify_currency_silver',
         bucket_name=LAKEHOUSE,
-        bucket_key='silver/example/address/*/*.parquet',
+        bucket_key='silver/example/dimcurrency/*/*.parquet',
         wildcard_match=True,
         timeout=18 * 60 * 60,
         poke_interval=120,
