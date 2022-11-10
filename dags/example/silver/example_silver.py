@@ -9,6 +9,7 @@ from airflow.providers.cncf.kubernetes.operators.spark_kubernetes import SparkKu
 from airflow.providers.cncf.kubernetes.sensors.spark_kubernetes import SparkKubernetesSensor
 from airflow.providers.amazon.aws.operators.s3_list import S3ListOperator
 
+LANDING_ZONE = getenv("LANDING_ZONE", "landing")
 LAKEHOUSE = getenv("LAKEHOUSE", "lakehouse")
 
 default_args = {
@@ -174,6 +175,16 @@ def example_silver():
     
     @task_group()
     def dimcurrency_silver():
+        # verify if new data has arrived on bronze bucket
+        verify_currency_landing = S3KeySensor(
+        task_id='t_verify_currency_landing',
+        bucket_name=LANDING_ZONE,
+        bucket_key='example/files-dim/DimCurrency.csv',
+        wildcard_match=True,
+        timeout=18 * 60 * 60,
+        poke_interval=120,
+        aws_conn_id='minio')
+
         # use spark-on-k8s to operate against the data
         silver_dimcurrency_spark_operator = SparkKubernetesOperator(
         task_id='t_silver_dimcurrency_spark_operator',
@@ -198,7 +209,7 @@ def example_silver():
         aws_conn_id='minio',
         do_xcom_push=True)    
 
-        silver_dimcurrency_spark_operator >> monitor_silver_dimcurrency_spark_operator >> list_silver_example_dimcurrency_folder
+        verify_currency_landing>>silver_dimcurrency_spark_operator >> monitor_silver_dimcurrency_spark_operator >> list_silver_example_dimcurrency_folder
 
 
     dimsalesterritory_silver() >> dimgeography_silver() >> dimcustomer_silver()
