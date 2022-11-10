@@ -65,6 +65,6 @@ def example_gold():
         do_xcom_push=True)    
 
         verify_currency_silver>>gold_dimcurrency_spark_operator >> monitor_gold_dimcurrency_spark_operator >> list_gold_example_dimcurrency_folder
-        dimcurrency_gold()
+    dimcurrency_gold()
 
 dag = example_gold()
