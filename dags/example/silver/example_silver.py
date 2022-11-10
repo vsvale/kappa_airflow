@@ -172,8 +172,37 @@ def example_silver():
 
         verify_address_bronze >> silver_dimsalesterritory_spark_operator >> monitor_silver_dimsalesterritory_spark_operator >> list_silver_example_dimsalesterritory_folder
     
+    @task_group()
+    def dimcurrency_silver():
+        # use spark-on-k8s to operate against the data
+        silver_dimcurrency_spark_operator = SparkKubernetesOperator(
+        task_id='t_silver_dimcurrency_spark_operator',
+        namespace='processing',
+        application_file='example-dimcurrency-silver.yaml',
+        kubernetes_conn_id='kubeconnect',
+        do_xcom_push=True)
+
+        # monitor spark application using sensor to determine the outcome of the task
+        monitor_silver_dimcurrency_spark_operator = SparkKubernetesSensor(
+        task_id='t_monitor_silver_dimcurrency_spark_operator',
+        namespace="processing",
+        application_name="{{ task_instance.xcom_pull(task_ids='dimcurrency_silver.t_silver_dimcurrency_spark_operator')['metadata']['name'] }}",
+        kubernetes_conn_id="kubeconnect")
+
+        # Confirm files are created
+        list_silver_example_dimcurrency_folder = S3ListOperator(
+        task_id='t_list_silver_example_dimcurrency_folder',
+        bucket=LAKEHOUSE,
+        prefix='silver/example/dimcurrency',
+        delimiter='/',
+        aws_conn_id='minio',
+        do_xcom_push=True)    
+
+        silver_dimcurrency_spark_operator >> monitor_silver_dimcurrency_spark_operator >> list_silver_example_dimcurrency_folder
+
 
     dimsalesterritory_silver() >> dimgeography_silver() >> dimcustomer_silver()
-  
+    dimcurrency_silver()
+
 
 dag = example_silver()
