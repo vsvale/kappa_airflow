@@ -8,7 +8,7 @@ spec:
   mode: cluster
   image: "vsvale/example-gold:1.0.0"
   imagePullPolicy: Always
-  mainApplicationFile: "local:///app/dimcurrency-gold.py"
+  mainApplicationFile: "local:///app/dimcurrency-kafka-gold.py"
   sparkVersion: "3.1.1"
   restartPolicy:
     type: OnFailure

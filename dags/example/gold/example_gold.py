@@ -30,16 +30,6 @@ tags=['example','spark','gold','s3','sensor','k8s'],description=description)
 def example_gold():
     @task_group()
     def dimcurrency_gold():
-        # verify if new data has arrived on silver bucket
-        verify_currency_silver = S3KeySensor(
-        task_id='t_verify_currency_silver',
-        bucket_name=LAKEHOUSE,
-        bucket_key='silver/example/dimcurrency/*/*.parquet',
-        wildcard_match=True,
-        timeout=18 * 60 * 60,
-        poke_interval=120,
-        aws_conn_id='minio')
-
         # use spark-on-k8s to operate against the data
         gold_dimcurrency_spark_operator = SparkKubernetesOperator(
         task_id='t_gold_dimcurrency_spark_operator',
@@ -64,7 +54,7 @@ def example_gold():
         aws_conn_id='minio',
         do_xcom_push=True)    
 
-        verify_currency_silver>>gold_dimcurrency_spark_operator >> monitor_gold_dimcurrency_spark_operator >> list_gold_example_dimcurrency_folder
+        gold_dimcurrency_spark_operator >> monitor_gold_dimcurrency_spark_operator >> list_gold_example_dimcurrency_folder
     dimcurrency_gold()
 
 dag = example_gold()
