@@ -26,7 +26,7 @@ default_args = {
 description = "DAG to create dim and facts and save in gold"
 
 @dag(schedule='@daily', default_args=default_args,catchup=False,
-tags=['example','spark','gold','s3','sensor','k8s'],description=description)
+tags=['example','spark','gold','s3','sensor','k8s','kafka'],description=description)
 def example_gold():
     @task_group()
     def dimcurrency_gold():
