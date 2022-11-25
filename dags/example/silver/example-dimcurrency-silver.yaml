@@ -8,7 +8,7 @@ spec:
   mode: cluster
   image: "vsvale/example-silver:1.0.0"
   imagePullPolicy: Always
-  mainApplicationFile: "local:///app/dimcurrency-silver.py"
+  mainApplicationFile: "local:///app/dimcurrency-kafka-silver.py"
   sparkVersion: "3.1.1"
   restartPolicy:
     type: OnFailure
@@ -22,16 +22,16 @@ spec:
     "fs.s3a.secret.key": "ebUjidNSHktNJOhaqeRseqmEr9IEBggD"
   driver:
     # cores: 1
-    coreRequest: 250m
-    coreLimit: "1200m"
-    memory: "512m"
+    coreRequest: 500m
+    coreLimit: "2000m"
+    memory: "1000m"
     labels:
       version: 3.1.1
     serviceAccount: default
   executor:
     # cores: 1
-    coreRequest: 250m
+    coreRequest: 1000m
     instances: 1
-    memory: "512m"
+    memory: "1000m"
     labels:
       version: 3.1.1

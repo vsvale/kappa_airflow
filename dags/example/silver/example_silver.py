@@ -175,16 +175,6 @@ def example_silver():
     
     @task_group()
     def dimcurrency_silver():
-        # verify if new data has arrived on bronze bucket
-        verify_currency_landing = S3KeySensor(
-        task_id='t_verify_currency_landing',
-        bucket_name=LANDING_ZONE,
-        bucket_key='example/files-dim/DimCurrency.csv',
-        wildcard_match=True,
-        timeout=18 * 60 * 60,
-        poke_interval=120,
-        aws_conn_id='minio')
-
         # use spark-on-k8s to operate against the data
         silver_dimcurrency_spark_operator = SparkKubernetesOperator(
         task_id='t_silver_dimcurrency_spark_operator',
@@ -207,11 +197,9 @@ def example_silver():
         prefix='silver/example/dimcurrency',
         delimiter='/',
         aws_conn_id='minio',
-        do_xcom_push=True)    
+        do_xcom_push=True)
 
-        verify_currency_landing>>silver_dimcurrency_spark_operator >> monitor_silver_dimcurrency_spark_operator >> list_silver_example_dimcurrency_folder
-
-
+        silver_dimcurrency_spark_operator >> monitor_silver_dimcurrency_spark_operator >> list_silver_example_dimcurrency_folder
     dimsalesterritory_silver() >> dimgeography_silver() >> dimcustomer_silver()
     dimcurrency_silver()
 
