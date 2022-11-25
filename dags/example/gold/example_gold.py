@@ -76,7 +76,7 @@ def example_gold():
         monitor_ysql_dimcurrency_spark_operator = SparkKubernetesSensor(
         task_id='t_monitor_ysql_dimcurrency_spark_operator',
         namespace="processing",
-        application_name="{{ task_instance.xcom_pull(task_ids='dimcurrency_gold.t_gold_dimcurrency_spark_operator')['metadata']['name'] }}",
+        application_name="{{ task_instance.xcom_pull(task_ids='dimcurrency_gold.t_ysql_dimcurrency_spark_operator')['metadata']['name'] }}",
         kubernetes_conn_id="kubeconnect")
 
 
